@@ -2,14 +2,27 @@
 健康管理系统（体检、预约、传智健康）  
 
 实现了部分功能
-如需运行需要自行配置
+如需运行
 
-spring-dao.xml中的数据库连接信息
+需要自行配置：
 
-QiniuUtils工具类中的Key
+1.spring-dao.xml中的数据库连接信息
+
+2.QiniuUtils工具类中的Key
+
+3.前端网页中的图片的Url地址
+
+4.dubbo信息(已配置)
 
 
-运行项目前需要运行zookeeper 默认端口2181
+需要提前运行：
+
+
+1.zookeeper 默认端口2181
+
+2.redis-server
+
+3.Database(Mysql)
 
 
 有问题可以发issue 看到应该会回复-_-
