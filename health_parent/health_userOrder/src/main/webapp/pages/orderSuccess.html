@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,user-scalable=no,minimal-ui">
+        <meta name="description" content="">
+        <meta name="author" content="cw">
+        <title>预约须知</title>
+        <link rel="stylesheet" href="../css/page-health-orderNotice.css" />
+        <script src="../plugins/jquery/dist/jquery.min.js"></script>
+        <script src="../plugins/healthmobile.js"></script>
+        <script src="../plugins/vue/vue.js"></script>
+        <script src="../plugins/vue/axios-0.18.0.js"></script>
+        <script>
+            var id = getUrlParam("orderId");
+        </script>
+    </head>
+    <body data-spy="scroll" data-target="#myNavbar" data-offset="150">
+        <div id="app" class="app">
+            <!-- 页面头部 -->
+            <div class="top-header">
+                <span class="f-left"><i class="icon-back" onclick="history.go(-1)"></i></span>
+                <span class="center">cw-health</span>
+                <span class="f-right"><i class="icon-more"></i></span>
+            </div>
+            <!-- 页面内容 -->
+            <div class="contentBox">
+                <div class="notice-article">
+                    <div class="info-title">
+                        <span class="name">体检预约成功</span>
+                    </div>
+                    <div class="notice-item">
+                        <div class="item-title">预约信息</div>
+                        <div class="item-content">
+                            <p>体检套餐：{{orderInfo.setmeal}}</p>
+                            <p>体检日期：{{(orderInfo.orderDate).slice(0,10)}}</p>
+                            <p>预约类型：{{orderInfo.orderType}}</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var vue = new Vue({
+            el:'#app',
+            data:{
+                orderInfo:{}
+            },
+            mounted(){
+                axios.post("/order/findById.do?id=" + id).then((response) => {
+                    this.orderInfo = response.data.data;
+                });
+            }
+        });
+    </script>
+</html>

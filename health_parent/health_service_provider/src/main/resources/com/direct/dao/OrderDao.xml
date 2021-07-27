@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.direct.dao.OrderDao">
+
+    <resultMap id="OrderResultMap" type="com.direct.pojo.Order">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="orderDate" property="orderDate"/>
+        <result column="orderType" property="orderType"/>
+        <result column="orderStatus" property="orderStatus"/>
+        <result column="setmeal_id" property="setmealId"/>
+    </resultMap>
+    <select id="findByMemberIdAndOrderDateAndSetmealId"
+            parameterType="com.direct.pojo.Order" resultType="com.direct.pojo.Order">
+        SELECT * FROM t_order WHERE member_id = #{memberId}
+                                AND orderDate = #{orderDate}
+                                AND setmeal_id = #{setmealId}
+    </select>
+
+
+    <insert id="add" parameterType="com.direct.pojo.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            t_order
+            (member_id,orderDate,orderType,orderStatus,setmeal_id)
+        values
+            (#{memberId},#{orderDate},#{orderType},#{orderStatus},#{setmealId})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="map">
+        SELECT o.orderDate  ,o.orderType,m.`name` AS member,s.`name` AS setmeal FROM
+                                                                                    t_order o,t_member m,t_setmeal s
+        WHERE o.id = #{id} AND m.id = o.member_id AND o.setmeal_id = s.id
+    </select>
+
+    <select id="findCountByEqualDate" parameterType="string" resultType="long">
+        SELECT COUNT(*) FROM t_order WHERE orderDate = #{reportDate}
+    </select>
+
+    <select id="findCountByGreateAndEqualDate" parameterType="string" resultType="long">
+        SELECT COUNT(*) FROM t_order WHERE orderDate >= #{reportDate}
+    </select>
+
+    <select id="findVisitedCountByEqualDate" parameterType="string" resultType="long">
+        SELECT COUNT(*) FROM t_order WHERE orderDate = #{reportDate} AND orderStatus = '已到诊'
+    </select>
+
+    <select id="findVisitedCountByGreaterAndEqualDate" parameterType="string" resultType="long">
+        SELECT COUNT(*) FROM t_order WHERE orderDate >= #{reportDate} AND orderStatus = '已到诊'
+    </select>
+</mapper>

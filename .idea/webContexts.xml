@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/health_parent/health_backend/src/main/webapp/pages/ordersetting.html" value="file://$PROJECT_DIR$/health_parent/health_backend/src/main/webapp/pages" />
+        <entry key="file://$PROJECT_DIR$/health_parent/health_backend/src/main/webapp/pages/setmeal.html" value="file://$PROJECT_DIR$/health_parent/health_backend/src/main/webapp/pages" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.direct.dao.OrderSettingDao">
+
+    <select id="findCountByOrderDate" parameterType="date" resultType="long">
+        SELECT COUNT(*) FROM t_ordersetting WHERE orderDate = #{orderDate}
+    </select>
+
+    <update id="updateNumberByOrderDate" parameterType="com.direct.pojo.OrderSetting">
+        UPDATE t_ordersetting SET number = #{number} WHERE orderDate = #{orderDate}
+    </update>
+
+    <insert id="add" parameterType="com.direct.pojo.OrderSetting">
+        insert into t_ordersetting
+            (orderDate,number,reservations)
+        values
+            (#{orderDate},#{number},#{reservations})
+    </insert>
+
+    <select id="getOrderSettingByMonth" parameterType="string" resultType="com.direct.pojo.OrderSetting">
+        SELECT * FROM t_ordersetting WHERE orderDate LIKE #{date}
+    </select>
+
+    <select id="findByOrderDate" parameterType="date" resultType="com.direct.pojo.OrderSetting">
+        SELECT * FROM t_ordersetting WHERE orderDate = #{date}
+    </select>
+
+    <update id="updateReservationsByOrderDate" parameterType="map">
+        UPDATE t_ordersetting SET reservations = #{reservations} WHERE orderDate = #{date}
+    </update>
+</mapper>

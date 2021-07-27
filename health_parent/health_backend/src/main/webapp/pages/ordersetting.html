@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>cw-Health</title>
+    <meta name="description" content="cw-Health">
+    <meta name="keywords" content="cw-Health">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/orderset.css">
+    <!-- 引入组件库 -->
+    <script src="../js/vue.js"></script>
+    <script src="../plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+</head>
+<body class="hold-transition">
+<div id="app">
+    <div class="content-header">
+        <h1>预约管理
+            <small>预约设置</small>
+        </h1>
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>预约管理</el-breadcrumb-item>
+            <el-breadcrumb-item>预约设置</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="app-container">
+        <div class="box">
+            <div class="box ordersetting">
+                <div class="calendar">
+                    <!-- 年份 月份 -->
+                    <div class="month">
+                        <div class="currentdate">
+                            <span class="choose-year">{{ currentYear }}年</span>
+                            <span class="choose-month">{{ currentMonth }}月</span>
+                        </div>
+                        <div class="choose">
+                            <span @click="goCurrentMonth(currentYear,currentMonth)" class="gotoday">今天</span>
+                            <span @click="pickPre(currentYear,currentMonth)">❮</span>
+                            <span @click="pickNext(currentYear,currentMonth)">❯</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- 星期 -->
+                    <div class="caldate">
+                        <ul class="weekdays">
+                            <li>周一</li>
+                            <li>周二</li>
+                            <li>周三</li>
+                            <li>周四</li>
+                            <li>周五</li>
+                            <li>周六</li>
+                            <li>周日</li>
+                        </ul>
+                        <!-- 日期 -->
+                        <ul class="days">
+                            <!-- v-for循环 每一次循环用<li>标签创建一天 -->
+                            <li v-for="dayobject in days">
+                                <template>
+                                    <!-- 非当前月份 -->
+                                    <div class="other-month" v-if="dayobject.day.getMonth()+1 != currentMonth">
+                                        {{ dayobject.day.getDate() }}
+                                    </div>
+                                    <!-- 当前月 -->
+                                    <div class="everyday" v-if="dayobject.day.getMonth()+1 == currentMonth">
+                                        <span class="datenumber">{{ dayobject.day.getDate()}}</span>
+
+                                        <template>
+                                            <template v-for="obj in leftobj">
+                                                <template v-if="obj.date == dayobject.day.getDate()">
+                                                    <template v-if="obj.number > obj.reservations">
+                                                        <div class="usual">
+                                                            <p>可预约{{obj.number}}人</p>
+                                                            <p>已预约{{obj.reservations}}人</p>
+                                                            <p>还可预约{{obj.number-obj.reservations}}人</p>
+<!--                                                            <p>{{dayobject.day -&#45;&#45; today}}</p>-->
+                                                            <button v-if="dayobject.day > today" @click="handleOrderSet(dayobject.day)"
+                                                                    class="orderbtn">设置
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                    <template v-else>
+                                                        <div class="fulled">
+                                                            <p>可预约{{obj.number}}人</p>
+                                                            <p>已预约{{obj.reservations}}人</p>
+                                                            <p>已满</p>
+                                                            <button v-if="dayobject.day > today" @click="handleOrderSet(dayobject.day)"
+                                                                    class="orderbtn">设置
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                            <button v-if="dayobject.day > today" @click="handleOrderSet(dayobject.day)"
+                                                    class="orderbtn">设置
+                                            </button>
+
+                                        </template>
+
+                                    </div>
+                                </template>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="../js/vue.js"></script>
+<script src="../plugins/elementui/index.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            today: new Date(),//当前日期
+            currentDay: 1,
+            currentMonth: 1,
+            LocalMonth: 1,
+            currentYear: 1970,
+            currentWeek: 1,
+            days: [],
+            leftobj: []//用于装载页面显示的月份下已经进行预约设置的数据
+        },
+        created: function () {//在vue初始化时调用
+            this.initData(null);
+        },
+        methods: {
+            //预约设置
+            handleOrderSet(day) {
+                //弹出设置对话框
+                //inputPattern 正式表达式,限制输入的内容
+                this.$prompt('请输入可预约人数', '预约设置', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputPattern: /^[0-9]*[1-9][0-9]*$/,
+                    inputErrorMessage: '可预约人数只能是正整数'
+                }).then(({value}) => {
+                    var date = this.formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())
+                    axios.post("../ordersetting/editNumberByDate1.do",{orderDate:date,number:value}).then(response => {
+                        this.$message({
+                            showClose: true,
+                            message: response.data.message,
+                            type: response.data.flag ? 'success':'error'
+                        });
+                        if(response.data.flag){
+                            this.initData(date);
+                        }
+                    });
+                }).catch(() => {
+
+                });
+            },
+
+            //上传成功提示
+            handleSuccess(response, file) {
+                if (response.flag) {
+                    this.$message({
+                        message: response.message,
+                        type: 'success'
+                    });
+                } else {
+                    this.$message.error(response.message);
+                }
+                console.log(response, file, fileList);
+            },
+            //初始化当前页要展示的日期
+            initData: function (cur) {
+                var date;
+                var index = 0;   //控制显示预定的天数
+                if (cur) {
+                    date = new Date(cur);
+                } else {
+                    var now = new Date();
+                    var d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1));
+                    d.setDate(35);
+                    date = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                }
+                this.currentDay = date.getDate();
+                this.currentYear = date.getFullYear();
+                this.currentMonth = date.getMonth() + 1;
+                this.currentWeek = date.getDay(); // //本月第一天是周几（周日0 周六 6）
+                var today = new Date();
+                this.LocalMonth = today.getMonth() + 1;
+                if (this.currentWeek == 0) {
+                    this.currentWeek = 7;
+                }
+                var str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay);
+                this.days.length = 0;
+                // 今天是周日，放在第一行第7个位置，前面6个
+                //初始化本周
+                for (var i = this.currentWeek - 1; i >= 0; i--) {
+                    var d = new Date(str);
+                    d.setDate(d.getDate() - i);
+                    var dayobject = {};
+                    dayobject.day = d;
+                    var now = new Date();
+                    if (d.getDate() === (now.getDate()) && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
+                        dayobject.index = index++;//从今天开始显示供预定的数量
+                    }
+                    else if (index != 0 && index < 3)
+                        dayobject.index = index++;//从今天开始3天内显示供预定的数量
+                    this.days.push(dayobject);//将日期放入data 中的days数组 供页面渲染使用
+                }
+                //其他周
+                for (var i = 1; i <= 35 - this.currentWeek; i++) {
+                    var d = new Date(str);
+                    d.setDate(d.getDate() + i);
+                    var dayobject = {};//dayobject   {day:date,index:2}
+                    dayobject.day = d;
+                    var now = new Date();
+                    if (d.getDate() === (now.getDate()) && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
+                        dayobject.index = index++;
+                    }
+                    else if (index != 0 && index < 3)
+                        dayobject.index = index++;
+                    this.days.push(dayobject);
+                }
+                //以月份为单位展示预约设置信息和已预约信息
+                //this.leftobj 从controller查出取来的
+                //调用controller中的方法，携带月份的数据
+                var month = this.currentMonth;
+                var param = "";
+                if (month < 10) {
+                    param = this.currentYear + "-0" + month;
+                } else {
+                    param = this.currentYear + month;
+                }
+                axios.get("../ordersetting/getOrderSettingByMonth.do?date=" + param).then(response => {
+                    this.leftobj = response.data.data;
+                });
+
+            },
+            //切换到当前月份
+            goCurrentMonth: function (year, month) {
+                var d = new Date();
+                this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+            },
+            //向前一个月
+            pickPre: function (year, month) {
+                // setDate(0); 上月最后一天
+                // setDate(-1); 上月倒数第二天
+                // setDate(dx) 参数dx为 上月最后一天的前后dx天
+                var d = new Date(this.formatDate(year, month, 1));
+                d.setDate(0);
+                this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+            },
+            //向后一个月
+            pickNext: function (year, month) {
+                var d = new Date(this.formatDate(year, month, 1));
+                d.setDate(35);////获取指定天之后的日期
+                this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+            },
+            // 返回 类似 2016-01-02 格式的字符串
+            formatDate: function (year, month, day) {
+                //alert(year + "-" + month + "-" + day);
+                var y = year;
+                var m = month;
+                if (m < 10) m = "0" + m;
+                var d = day;
+                if (d < 10) d = "0" + d;
+                return y + "-" + m + "-" + d
+            }
+        }
+    })
+</script>
+</html>

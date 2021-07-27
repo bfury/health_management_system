@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="health_userOrder:war">
+    <output-path>$PROJECT_DIR$/health_parent/health_userOrder/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>health_userOrder</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="health_userOrder-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="health_userOrder:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>健康管理系统</title>
+    <meta name="description" content="健康管理系统">
+    <meta name="keywords" content="健康管理系统">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.12/lib/index.css"/>
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .my-header {
+            padding: 8px 10px;
+            height: 15px;
+            font-size: 20px;
+            background-color: rgba(0, 0, 0, 1);
+            color: #fff;
+        }
+        .my-header::after {
+            content: " ";
+            clear: both;
+            display: block;
+        }
+            .content-wrapper {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 50%);
+            grid-row-gap: 15px;
+        }
+        .content-item {
+            padding: 0 10px;
+        }
+        .menu-item {
+            border-radius: 20px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 5px 12px 0 rgba(0,0,0,.1);
+            text-indent: 15px;
+            height: 70px;
+            padding: 2px 5px;
+            position: relative;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+        }
+        .item-icon {
+            position: absolute;
+            font-size: 30px;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body class="hold-transition" style="background-color:#f9f9f9">
+<div id="app">
+    <div class="my-header">
+        <i style="line-height: 20px; float: right" class="fa fa-ellipsis-h"></i>
+    </div>
+    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item>
+            <van-image
+            width="100%"
+            height="15rem"
+            fit="cover"
+            src="http://qwl2wfbu4.hd-bkt.clouddn.com/14b6fee5-ca56-4343-9496-b526d665b80f3.jpg"
+            />
+        </van-swipe-item>
+        <van-swipe-item>
+            <van-image
+                    fit="cover"
+                    width="100%"
+                    height="15rem"
+                    src="http://qwl2wfbu4.hd-bkt.clouddn.com/517cc325-fa30-4304-8856-9491dcc007832.jpg"
+            />
+        </van-swipe-item>
+        <van-swipe-item>
+            <van-image
+                    fit="cover"
+                    width="100%"
+                    height="15rem"
+                    src="http://qwl2wfbu4.hd-bkt.clouddn.com/9d496da8-f271-4662-a770-6d3c29be65b0g.JPG"
+            />
+        </van-swipe-item>
+        <van-swipe-item>
+            <van-image
+                    fit="cover"
+                    width="100%"
+                    height="15rem"
+                    src="http://qwl2wfbu4.hd-bkt.clouddn.com/f28bbd83-55ee-438d-b612-71616e638bff1.jpg"
+            />
+        </van-swipe-item>
+    </van-swipe>
+
+    <div class="content-wrapper">
+        <div v-for="(item, index) in menu" class="content-item" @click="turn2page(item)" :key="index" >
+            <div class="menu-item">
+                <div>
+                    <div>{{ item.name }}</div>
+                    <div style="font-size: 12px; color: #ccc">{{ item.name }}</div>
+                </div>
+                <i class="item-icon" :class="item.icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="footer" style="margin-top: 10px;text-align: center">
+        <van-image width="80%" fit="scaledown" src="https://img01.yzcdn.cn/vant/cat.jpeg" />
+    </div>
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="../js/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.12/lib/vant.min.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+<script>
+    var vue = new Vue({
+        el: '#app',
+        data:{
+            menu: [
+                {name: "体检预约", icon: "fa fa-bell-o", url: "index.html"},
+                {name: "占位符2", icon: "fa fa-bars"},
+                {name: "占位符3", icon: "fa fa-user-circle"},
+                {name: "占位符4", icon: "fa fa-comments-o"},
+                {name: "占位符5", icon: "fa fa-credit-card"},
+                {name: "占位符6", icon: "fa fa-flash"}
+            ],
+            imgs: []
+        },
+        //钩子函数，VUE对象初始化完成后自动执行
+        created() {
+            this.findPage();
+        },
+        methods: {
+            // 点击跳转
+            turn2page(item) {
+                if (item.url) {
+                    window.location.href = `http://localhost:84/pages/${item.url}`;
+                } else {
+                    console.log("clicked!")
+                }
+            },
+            // 拉取主页图片及相关id
+            findPage() {
+
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.direct.dao.CheckItemDao">
+    <!--插入检查项数据-->
+    <insert id="add" parameterType="com.direct.pojo.CheckItem">
+        insert into t_checkitem(code, name, sex, age, price, type, remark, attention)
+        values (#{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{remark}, #{attention})
+    </insert>
+
+    <select id="selectByCondition" parameterType="String" resultType="com.direct.pojo.CheckItem">
+        select * from t_checkitem
+        <if test="value != null and value.length > 0">
+            where code like '%${value}%' or name like '%${value}%'
+        </if>
+    </select>
+
+    <!--删除-->
+    <delete id="deleteById" parameterType="int">
+        delete
+        from t_checkitem
+        where id = #{id}
+    </delete>
+    <!--根据检查项id查询中间关系表-->
+    <select id="findCountByCheckItemId" resultType="long" parameterType="int">
+        select count(*)
+        from t_checkgroup_checkitem
+        where checkitem_id = #{checkitem_id}
+    </select>
+
+    <!--编辑-->
+    <update id="edit" parameterType="com.direct.pojo.CheckItem">
+        update t_checkitem
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="findById" parameterType="int" resultType="com.direct.pojo.CheckItem">
+        select *
+        from t_checkitem
+        where id = #{id}
+    </select>
+
+    <select id="findAll" resultType="com.direct.pojo.CheckItem">
+        select *
+        from t_checkitem
+    </select>
+
+    <!--根据检查组id查询检查项信息-->
+    <select id="findCheckItemById" resultType="com.direct.pojo.CheckItem">
+        select *
+        from t_checkitem
+        where id in (select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id})
+    </select>
+
+</mapper>
