@@ -26,3 +26,21 @@
 
 
 有问题可以发issue 看到应该会回复-_-
+
+# 部分效果示例
+用户移动端
+
+
+![image.png](https://i.loli.net/2021/08/02/EUWqz7tly4owXdO.png)
+![image.png](https://i.loli.net/2021/08/02/HtQRjfuXxdcvCpL.png)
+
+
+商家管理端
+
+
+![image.png](https://i.loli.net/2021/08/02/XogOq8hFVxZfm3D.png)
+![image.png](https://i.loli.net/2021/08/02/tFo15ws72NBpf9m.png)
+![image.png](https://i.loli.net/2021/08/02/SfePwa8ix2uyCEr.png)
+
+
+
