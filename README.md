@@ -1,4 +1,9 @@
 # direct_health
+
+Code review:
+https://lgtm.com/projects/g/bfury/health_manage_system/context:java
+
+
 健康管理系统（体检、预约、传智健康）  
 
 实现了部分功能
