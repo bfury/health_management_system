@@ -20,7 +20,7 @@
     <properties>
         <junit.version>4.12</junit.version>
         <spring.version>5.0.5.RELEASE</spring.version>
-        <pagehelper.version>4.1.4</pagehelper.version>
+        <pagehelper.version>5.2.1</pagehelper.version>
         <servlet-api.version>2.5</servlet-api.version>
         <dubbo.version>2.6.0</dubbo.version>
         <zookeeper.version>3.4.7</zookeeper.version>
