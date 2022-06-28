@@ -24,9 +24,9 @@
 
 1.zookeeper 默认端口2181
 
-2.redis-server
+2.redis-server(redis)
 
-3.Database(Mysql)
+3.数据库(Mysql)
 
 
 有问题可以发issue 看到应该会回复-_-
